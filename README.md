@@ -59,9 +59,10 @@ sudo systemctl restart apache2
 
 ![image5](assets/6.jpg)
 
-Далі я заповнив свій html файл
+Далі я заповнив html файл
 
 ![image6](assets/5.jpg)
+
 
 Перейшовши за адресою створеного ресурсу http://3.21.40.66/ отримав наступний результат:
 
