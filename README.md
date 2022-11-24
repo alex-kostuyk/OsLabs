@@ -73,3 +73,4 @@ Bash скрипт установки та запуску apache2
 
 ![image](img/13.jpg)
 
+![Лінк на сайт](http://ec2-18-192-26-168.eu-central-1.compute.amazonaws.com/)
