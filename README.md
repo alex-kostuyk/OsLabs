@@ -70,4 +70,4 @@ sudo systemctl restart apache2
 
 
 
-[Лінк на сайт](http://3.21.40.66/)
+[Лінк на сайт](http://ec2-3-71-179-42.eu-central-1.compute.amazonaws.com/)
