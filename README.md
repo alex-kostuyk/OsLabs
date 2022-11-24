@@ -1,9 +1,10 @@
-# Лабораторна робота №5. Деплой проекту на AWS EC2
+# Лабораторна робота №4. Create terraform scenario for provisioning infrastructure on GCP (or AWS) cloud
 
 ## План:
- 1. Зареєструватись на AWS.
- 2. Створити інстанс EC2.
- 3. Задеплоїти проект (може бути html сторінка) і скинути посилання в звіт для можливості перегляду.
+ 1. Create one instance (image: ubuntu 20.04)
+ 2. Allow HTTP/HTTPS traffic on a NIC
+ 3. Provision one SSH public key for created instance
+ 4. Install Web Server (Apache HTTP Server / NGINX HTTP Server) via bash scenario
 
 ---
 Виконав студент ІІІ курсу
@@ -14,53 +15,61 @@
 
 ---
 
-### 1. Зареєструватись на AWS.
+### 1. Create one instance (image: ubuntu 20.04)
 
-У мене вже був акаунт на AWS, тому перше завдання було виконаним
+зареєструвався на AWS, та створив користувача. Після чого отримав для цього користувача access_key i secret_key для того, щоб у подальшому використати їх у файлі config.tf
 
-### 2. Створити інстанс EC2.
+![image](img/1.jpg)
 
-вибираю операційну систему
-![image1](assets/Знімок екрана 2022-11-18 043414.jpg)
+Далі я створив файл config.tf для прописування конфігурації образу убунти, щоб за допомогою Тераформу розмістити її на AWS.
 
-Далі згенерував SSH ключ для доступу, також можна було вибрати для підключення вже існуючі ключі
+![image](img/2.jpg)
 
-Переходимо до налаштувань мережі,де даємо доступ через SSH та дозволяємо HTTP і HTTPS трафік
+Потім виконав команди terraform init(деплой інстансу на AWS), terraform plan(які зміни відбудуться після аплаю файлу), terraform apply(власне розміщення на AWS):
 
-![image2](assets/Знімок екрана 2022-11-18 043439.jpg)
+![image](img/3.jpg)
 
-Натискаємо на Launch Instance і переходимо у вкладку Instances
+![image](img/4.jpg)
 
-![image3](assets/Знімок екрана 2022-11-18 043622.jpg)
+### 2. Allow HTTP/HTTPS traffic on a NIC
 
-Бачимо, що наш інстанс створено
+Прописую відповідні дозволи у файлі, також прописую security group безпосередньо для цього інстансу. 
 
-Після цього вибираємо його(просто клік мишею) та тиснемо зверху на кнопку Connect
+![image](img/5.jpg)
 
-![image4](assets/Знімок екрана 2022-11-18 062546.jpg)
+Вигляд доданої security group y AWS:
 
-### 3. Задеплоїти проект (може бути html сторінка) і скинути посилання в звіт для можливості перегляду.
+![image](img/6.jpg)
 
-Входимо у термінал ОС, яку ми встановили раніше
+результат:
 
-![image5](assets/Знімок екрана 2022-11-18 051200.jpg)
+![image](img/7.jpg)
 
-Тепер нам треба встановити сервер (nginx або apache).
+### 3. Provision one SSH public key for created instance
 
-Встановив за допомогою команд
+Спочатку згенерую приватний та паблік ssh-ключі за допомогою наступної команди:
 
-```
-sudo apt upgrade
-sudo apt install apache2
-sudo ufw allow in "Apache Full"
-sudo systemctl restart apache2
-```
+![image](img/8.jpg)
 
+Додаю наступне у config.tf:
 
-Далі я заповнив свій html файл
+![image](img/9.jpg)
 
-![image6](assets/Знімок екрана 2022-11-18 062146.jpg)
+Далі потрібно додати ключ у resource:
 
+![image](img/10.jpg)
 
+ingress блок, що дозволяє вхідному трафіку SSH отримати доступ до VPS через протокол SSH з віддаленої машини
 
-[Лінк на сайт](https://3.21.40.66/)
+![image](img/11.jpg)
+
+### 4. Install Web Server (Apache HTTP Server / NGINX HTTP Server) via bash scenario
+
+Bash скрипт установки та запуску apache2
+
+![image](img/12.jpg)
+
+Додання скрипту до instance за допомогою user_data
+
+![image](img/13.jpg)
+
